@@ -39,29 +39,47 @@
       <div class="battle row">
         <div class="col-lg-4 col-md-3 col-sm-3" id="player">
           <h2 class="text-left"></h2>
-          <img id="player-img" class="float-left img-fluid" src=""></img>
           <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated" id="playerHpBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
           </div>
-          <!--Player stats will be displayed on the bottom of the screen !-->
-          <div class="col-xs-3" id="playerStats">
-            <table id="stats">
-              <tr>
-                <td class="attributes"><p id="pHp">HP:<span></span></p></td>
-                <td class="attributes"><p id="pAtk">ATK:<span></span></p></td>
-              </tr>
-              <tr>
-                <td class="attributes"><p id="pDef">DEF:<span></span></p></td>
-                <td class="attributes"><p id="pAgi">AGI:<span></span></p></td>
-              </tr>
-            </table>
-            <div class="row">
-                <div class="col equipButton" id="equip"><span>Equip</span></div>
-                <div class="col equipButton" id="unequip"><span>Unequip</span></div>
-                <div class="col equipButton" id="fightButton"><span>Fight!</span></div>
-                <div class="col equipButton" id="enemyLevelButton"><span>Harder enemy</span></div>
+          <div class="row">
+            <!--Player stats will be displayed on the bottom of the screen !-->
+            <div class="col" id="canvasDiv"></div>
+            <div class="col" id="playerStats">
+              <table id="stats">
+                <tr>
+                  <td class="attributes"><p id="pLvl">LVL:<span></span></p></td>
+                </tr>
+                <tr>
+                  <td class="attributes"><p id="pHp">HP:<span></span></p></td>
+                  <td class="attributes"><p id="pAtk">ATK:<span></span></p></td>
+                </tr>
+                <tr>
+                  <td class="attributes"><p id="pDef">DEF:<span></span></p></td>
+                  <td class="attributes"><p id="pAgi">AGI:<span></span></p></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col">
+              <div class="row">
+                  <div class="col equipButton" id="equip"><span>Equip</span></div>
+                  <div class="col equipButton" id="unequip"><span>Unequip</span></div>
+                  <div class="col equipButton" id="fightButton">Fight</div>
+                  <div class="col equipButton" id="enemyLevelButton"><span>Harder enemy</span></div>
+                  <div class="col equipButton" id="bossButton"><span>Fight BOSS!</span></div>
+              </div>
+            </div>
             </div>
           </div>
+        </div>
+        <!--Inventory popup window when equip button is pressed -->
+        <div class="inventoryWindow" id="itemList">
+          <div class="row">
+              <div class="col-xs-12">
+                <div class="modalCloseX" id ="equipClose">&times;</div>
+              </div>
+            </div>
+          <table id="items"></table>
         </div>
       </div>
     </div>      
@@ -75,6 +93,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!--<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>-->
     <script src="assets/js/game.js"></script>
   </body>
 </html>

@@ -5,13 +5,22 @@ html, body{
   padding: 0px;
 }
 
-#player {
+#battleText {
+  overflow-y: scroll;
+  max-width: 100%;
+  max-height: 33%;
+  top: 32%;
+  position: fixed;
+}
+
+#canvas {
+  max-width: 100%;
+}
+
+#characterSelect {
   background-color: whitesmoke;
   max-width: 100%;
-  max-height: 30%;
-  bottom: 0;
-  right: 0;
-  position: fixed;
+  max-height: 100%;
 }
 
 #enemy {
@@ -23,18 +32,29 @@ html, body{
   position: fixed;
 }
 
-#characterSelect {
-  background-color: whitesmoke;
-  max-width: 100%;
-  max-height: 100%;
+#itemList {
+  position: absolute;
+  padding: 1% 1% 1% 1%;
+  overflow: auto;
 }
 
-#battleText {
-  overflow-y: scroll;
+#player {
+  background-color: whitesmoke;
   max-width: 100%;
-  max-height: 33%;
-  top: 32%;
+  max-height: 30%;
+  bottom: 0;
+  right: 0;
   position: fixed;
+}
+
+#stats {
+  font-size: 1.2em;
+}
+.modalCloseX {
+  position: absolute;
+  top : 0;
+  right: 0;
+  padding-bottom: 5px;
 }
 
 .equipButton {
@@ -45,6 +65,22 @@ html, body{
   color: #FFFFFF;
   text-align: center;
   cursor: pointer;
+}
+
+.inventoryWindow {
+  margin-left: 25%;
+  position: relative;
+  height: 30%;
+  width: 30%;
+  padding: 2px;
+  background-color: #808080;
+  border-style: double;
+  border-width: 5px;
+  border-color: #000000;
+  color: #FFFFFF;
+  text-align: left;
+  top: 50%;
+  display: none;
 }
 
 .selectButton {
