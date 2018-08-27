@@ -556,12 +556,19 @@ function gainExperience() {
   var expForLevel = player.class.level * 10;
   experience += enemy.monster.exp;
   if (experience > expForLevel) {
+    $("#battleText").prepend("<p style='color:blue'>You leveled up!!!");
     player.class.level += 1;
     player.class.atk += Math.floor(player.weapon.atk / 2);
     player.class.agi += Math.floor(player.weapon.agi / 2);
     player.class.crit += player.weapon.crit;
     player.class.hp += player.armor.hp * 3;
     player.class.def += Math.floor(player.armor.def / 2);
+    $("#battleText").prepend("<p style='color:blue'> Level --> " + player.class.level);
+    $("#battleText").prepend("<p style='color:blue'> HP --> " + player.class.hp);
+    $("#battleText").prepend("<p style='color:blue'> ATK --> " + player.class.atk);
+    $("#battleText").prepend("<p style='color:blue'> DEF --> " + player.class.def);
+    $("#battleText").prepend("<p style='color:blue'> AGI --> " + player.class.agi);
+    $("#battleText").prepend("<p style='color:blue'> CRIT --> " + player.class.crit);
   }
   loadPlayerStats(player);
 }
