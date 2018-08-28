@@ -23,6 +23,7 @@ let enemyMiss = false
 let enemyTimeout
 let equipFlag = false
 let experience = 0
+let expForLevel = 0
 let fightFlag = false
 let playerDamage = 0
 let playerMiss = false
@@ -51,7 +52,6 @@ var eyeOpenTime = 0;
 var timeBtwBlinks = 4000;
 var blinkUpdateTime = 200;
 var blinkTimer = setInterval(updateBlink, blinkUpdateTime);
-var fpsInterval = setInterval(updateFPS, 1000);
 var numFramesDrawn = 0;
 var curFPS = 0;
 
@@ -76,7 +76,6 @@ let playerClass = [
  crit: 0,
  matk: 0,
  level: 1,
- img: 'swordman.svg'
 },
 {name: 'Squire',
  hp: 80,
@@ -85,8 +84,8 @@ let playerClass = [
  agi: 5,
  crit: 1,
  matk: 0,
- level: 1,
- img: 'barbute.svg'},
+ level: 1
+ },
  {name: 'Ranger',
  hp: 60,
  atk: 2,
@@ -94,8 +93,17 @@ let playerClass = [
  agi: 9,
  crit: 50,
  matk: 0,
+ level: 1
+ },
+ {name: 'Monk',
+ hp: 85,
+ atk: 6,
+ def: 4,
+ agi: 6,
+ crit: 3,
+ matk: 0,
  level: 1,
- img: 'bowman.svg'}
+}
 ]
 
 /* Weapons will be defined by the following criteria:
@@ -106,27 +114,36 @@ let playerClass = [
   5. Critical chance
 */
 
-let commonWeapons = [
+let commonWeapons =
+[
   {name: 'Battered Axe',
    rarity: 'common',
    atk: 10,
    agi: 3,
    crit: 1
  },
- {name: 'Gladius',
+   {name: 'Gladius',
+    rarity: 'common',
+    atk: 8,
+    agi: 7,
+    crit: 1
+  },
+  {name: 'Shortbow',
+   rarity: 'common',
+   atk: 4,
+   agi: 10,
+   crit: 10
+ },
+ {name: 'Brass Knuckles',
   rarity: 'common',
-  atk: 8,
-  agi: 7,
-  crit: 1
-},
-{name: 'Shortbow',
- rarity: 'common',
- atk: 4,
- agi: 10,
- crit: 10
-}]
+  atk: 4,
+  agi: 10,
+  crit: 10
+ }
+]
 
-let uncommonWeapons = [
+let uncommonWeapons =
+[
    {name: 'Refined Axe',
     rarity: 'uncommon',
     atk: 17,
@@ -144,27 +161,42 @@ let uncommonWeapons = [
      atk: 5,
      agi: 15,
      crit: 20
- }]
+   },
+   {name: 'Ruby Infused Knuckles',
+    rarity: 'uncommon',
+    atk: 15,
+    agi: 13,
+    crit: 6
+  }
+]
 
-let rareWeapons = [
+let rareWeapons =
+[
   {name: 'Warmonger',
    rarity: 'rare',
    atk: 50,
    agi: 20,
    crit: 10
- },
- {name: 'Oathbreaker',
-  rarity: 'rare',
-  atk: 30,
-  agi: 40,
-  crit: 20
-},
-{name: "Siren's Cry",
- rarity: 'rare',
- atk: 15,
- agi: 50,
- crit: 30
-}]
+   },
+   {name: 'Oathbreaker',
+    rarity: 'rare',
+    atk: 30,
+    agi: 40,
+    crit: 20
+  },
+  {name: "Siren's Cry",
+   rarity: 'rare',
+   atk: 15,
+   agi: 50,
+   crit: 30
+  },
+  {name: "Ancient Ebony Fist",
+   rarity: 'rare',
+   atk: 45,
+   agi: 30,
+   crit: 25
+  }
+]
 /*Armor will be defined by the following criteria:
   1. Armor name
   2. Rarity
@@ -215,7 +247,23 @@ let commonArmor = [
     agi: 3,
     matk: 0,
     exp: 6,
-    img: 'wolf.svg'}
+    img: 'wolf.svg'},
+    {name: 'Phantombug',
+     hp: 45,
+     atk: 3,
+     def: 3,
+     agi: 3,
+     matk: 0,
+     exp: 4,
+     img: 'rat.svg'},
+    {name: 'Frightcat',
+     hp: 70,
+     atk: 5,
+     def: 2,
+     agi: 3,
+     matk: 0,
+     exp: 8,
+     img: 'wolf.svg'}
  ]
 
  let easyEnemies = [
@@ -266,6 +314,9 @@ function main(){
   $("#select3").click(function() {
     selectCharacter($("#select3 span").html());
   });
+  $("#select4").click(function() {
+    selectCharacter($("#select4 span").html());
+  });
 
   // When the user clicks the x within the modal, close it
   $("#equipClose").click(function() {
@@ -282,7 +333,6 @@ function main(){
     unequipCharacter();
     calcPlayerDamage();
   });
-  //React.render(<beginFight />, document.getElementById('buttonRow'));
   $("#fightButton").click(function() {
     if (fightFlag === false) {
       beginFight();
@@ -298,6 +348,7 @@ function main(){
       fightBoss();
     }
   });
+  prepareCanvas(document.getElementById("canvasDiv"), 490, 220);
 }
 
 function loadGame(){
@@ -343,6 +394,13 @@ function selectCharacter(selection){
       playerPos = 2;
       weapons.push(commonWeapons[2]);
       break;
+      case 'Monk':
+        this.weapon = commonWeapons[3];
+        this.armor = commonArmor[0];
+        pClass = playerClass[3];
+        playerPos = 3;
+        weapons.push(commonWeapons[3]);
+        break;
     default:
       this.weapon = commonWeapons[0];
       this.armor = commonArmor[0];
@@ -363,8 +421,6 @@ function loadPlayerStats(player){
     $("#pAtk span").html(player.class.atk);
     $("#pDef span").html(player.class.def);
     $("#pAgi span").html(player.class.agi);
-    //$("#player-img").attr("src", "assets/images/" + player.class.img);
-    prepareCanvas(document.getElementById("canvasDiv"), 490, 220);
 }
 
 function loadEnemyStats(enemy){
@@ -467,7 +523,6 @@ function playerAttack(enemyHp, maxEnemyHp, playerAgi){
     $("#enemyHpBar").attr("style", "width:" + Math.floor(((this.enemy.hp / this.enemy.maxHp) * 100)) + "%");
     if (xIsCrit ? $("#battleText").prepend("<p style='color:green'>Critical Hit!! YOU hit enemy for " + playerDamage + " points of damage.</p>") : $("#battleText").prepend("<p style='color:green'>YOU hit enemy for " + playerDamage + " points of damage.</p>"));
     playerTimeout = setTimeout(playerAttack, this.player.agi, this.enemy.hp, this.enemy.maxHp, this.player.agi);
-    //return setTimeout(playerAttack, this.player.agi, this.enemy.hp, this.enemy.maxHp, this.player.agi);
     return playerTimeout;
   }
 }
@@ -553,8 +608,9 @@ function resetGame() {
 
 function gainExperience() {
   $("#battleText").prepend("<p style='color:blue'>You gained " + enemy.monster.exp + " experience points.");
-  var expForLevel = player.class.level * 10;
+  expForLevel = player.class.level * 10;
   experience += enemy.monster.exp;
+  $("#playerExpBar").attr("style", "width:" + Math.floor(((experience / expForLevel) * 100)) + "%")
   if (experience > expForLevel) {
     $("#battleText").prepend("<p style='color:blue'>You leveled up!!!");
     player.class.level += 1;
@@ -571,12 +627,6 @@ function gainExperience() {
     $("#battleText").prepend("<p style='color:blue'> CRIT --> " + player.class.crit);
   }
   loadPlayerStats(player);
-}
-
-function updateFPS() {
-
-	curFPS = numFramesDrawn;
-	numFramesDrawn = 0;
 }
 
 function prepareCanvas(canvasDiv, canvasWidth, canvasHeight)
@@ -636,10 +686,6 @@ function redraw() {
 
   drawEllipse(x + 47, y - 68 - breathAmt, 8, curEyeHeight); // Left Eye
   drawEllipse(x + 58, y - 68 - breathAmt, 8, curEyeHeight); // Right Eye
-
-  /*context.font = "bold 12px sans-serif";
-  context.fillText("fps: " + curFPS + "/" + fps + " (" + numFramesDrawn + ")", 40, 200);
-  ++numFramesDrawn;*/
 }
 
 function drawEllipse(centerX, centerY, width, height) {
